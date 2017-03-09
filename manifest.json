@@ -1,8 +1,8 @@
 {
 	"manifest_version" : 2,
 
-	"name" : "Tabs to Dropbox",
-	"description" : "Saves chrome tabs in a JSON file on your Dropbox.\nFor times where chrome fucks up your session.",
+	"name" : "Tabs to Cloud",
+	"description" : "Saves chrome tabs in a JSON file on your cloud storage.\nFor times where chrome fucks up your session.",
 
 	"version" : "1.0",
 
