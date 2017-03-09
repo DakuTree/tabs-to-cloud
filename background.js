@@ -50,9 +50,12 @@ function saveTabs() {
 
 
 		chrome.storage.sync.get({
-			encryption      : 'text',
+			dropbox_token  : '',
+			encryption     : 'text',
 			unix_timestamp : false
 		}, function (options) {
+			if(options.dropbox_token === '') return; //Dropbox token hasn't been set yet so just return
+
 			let jsonData = JSON.stringify(tabObj, null, '\t'),
 			    args = {
 				//FIXME: This filename should be PC specific
@@ -81,7 +84,7 @@ function saveTabs() {
 				url: 'https://content.dropboxapi.com/2/files/upload',
 				type: 'POST',
 				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer ' + '#');
+					xhr.setRequestHeader('Authorization', 'Bearer ' + options.dropbox_token);
 					xhr.setRequestHeader('Content-Type', 'application/octet-stream');
 					xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args));
 				},

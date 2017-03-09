@@ -1,14 +1,16 @@
 "use strict";
 
 function save_options() {
-	let interval        = parseInt($('#interval').val()),
-	    encryption      = $('#encryption').val(),
+	let dropbox_token  = $('#dropbox-token').val(),
+	    interval       = parseInt($('#interval').val()),
+	    encryption     = $('#encryption').val(),
 	    unix_timestamp = $("#unix-timestamp").is(':checked');
 
 	//Just incase something goes horribly wrong, let's not break the users browser with infinite requests..
 	if(interval < 30) interval = 60;
 
 	chrome.storage.sync.set({
+		dropbox_token  : dropbox_token,
 		interval       : interval,
 		encryption     : encryption,
 		unix_timestamp : unix_timestamp
