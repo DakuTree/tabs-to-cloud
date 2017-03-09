@@ -1,0 +1,8 @@
+# JetBrains Apps
+/.idea/*
+!/.idea/jsLinters
+!/.idea/codeStyleSettings.xml
+!/.idea/encodings.xml
+!/.idea/jsLibraryMappings.xml
+
+originals/
