@@ -1,3 +1,5 @@
+"use strict";
+
 function save_options() {
 	let interval        = parseInt($('#interval').val()),
 	    encryption      = $('#encryption').val(),
