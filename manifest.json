@@ -20,9 +20,6 @@
 		"page" : "options.html",
 
 		"chrome_style" : true
-
-		// Unsupported in future versions of chrome.
-		// "open_in_tab" : true
 	},
 
 	"background" : {
