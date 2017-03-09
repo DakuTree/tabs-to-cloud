@@ -2,8 +2,6 @@ chrome.runtime.onInstalled.addListener(function(details){
     if(details.reason == "install"){
         console.log("This is a first install!");
 
-		generateUniqueID();
-
 		chrome.runtime.openOptionsPage();
     }else if(details.reason == "update"){
         var thisVersion = chrome.runtime.getManifest().version;
@@ -114,19 +112,4 @@ function getTimestamp(useTimestamp) {
 	}
 
 	return timestamp
-}
-//Mostly taken from: http://stackoverflow.com/a/23854032/1168377
-function generateUniqueID() {
-    var randomPool = new Uint8Array(32);
-    crypto.getRandomValues(randomPool);
-    var hex = '';
-    for (var i = 0; i < randomPool.length; ++i) {
-        hex += randomPool[i].toString(16);
-    }
-
-	chrome.storage.local.set({
-		unique_id : hex.substr(0, 6)
-	}, function () {
-		callback();
-	});
 }
