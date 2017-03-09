@@ -46,12 +46,12 @@ function saveTabs() {
 
 		chrome.storage.sync.get({
 			encryption      : 'text',
-			human_timestamp : false
+			unix_timestamp : false
 		}, function (options) {
 			let jsonData = JSON.stringify(tabObj, null, '\t'),
 			    args = {
 				//FIXME: This filename should be PC specific
-				'path': '/'+getTimestamp(options.human_timestamp)+'.{ENCRYPTION}.json',
+				'path': '/'+getTimestamp(options.unix_timestamp)+'.{ENCRYPTION}.json',
 				'mode': 'overwrite',
 				'autorename': false,
 				'mute': true
@@ -92,8 +92,8 @@ function saveTabs() {
 	});
 }
 
-function getTimestamp(humanReadable) {
-	if(!humanReadable) {
+function getTimestamp(useTimestamp) {
+	if(useTimestamp) {
 		var timestamp = Date.now();
 	} else {
 		let now  = new Date(),
@@ -110,7 +110,7 @@ function getTimestamp(humanReadable) {
 		if(mm<10) mm = '0'+mm;
 		if(ss<10) ss = '0'+ss;
 
-		var timestamp = YYYY+'-'+MM+'-'+DD+'_'+hh+mm+ss;
+		var timestamp = YYYY+'/'+MM+'/'+DD+'_'+hh+mm+ss;
 	}
 
 	return timestamp
