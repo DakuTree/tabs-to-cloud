@@ -23,12 +23,16 @@ function save_options() {
 }
 
 function restore_options() {
+	/**
+	 * @param {{dropbox_token:string}} options
+	 */
 	chrome.storage.sync.get({
 		dropbox_token   : '',
 		interval        : 60,
 		encryption      : 'text',
 		unix_timestamp  : false
 	}, function (options) {
+
 		$('#dropbox-token').val(options.dropbox_token);
 		$('#interval').val(options.interval);
 		$('#encryption').val(options.encryption);

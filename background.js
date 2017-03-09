@@ -1,20 +1,20 @@
 "use strict";
 
 chrome.runtime.onInstalled.addListener(function(details){
-    if(details.reason == "install"){
+    if(details.reason === "install"){
         console.log("This is a first install!");
 
 		chrome.runtime.openOptionsPage();
-    }else if(details.reason == "update"){
-        var thisVersion = chrome.runtime.getManifest().version;
+    }else if(details.reason === "update"){
+        let thisVersion = chrome.runtime.getManifest().version;
         console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
     }
 });
-chrome.storage.onChanged.addListener(function(changes, areaName) {
+chrome.storage.onChanged.addListener(function(/*changes, areaName*/) {
 	console.log("Detected storage change, reloading extension");
 
 	//We can't update the alarm with changes, so we need to clear and re-setup.
-	chrome.alarms.clearAll(function(wasCleared) {
+	chrome.alarms.clearAll(function(/*wasCleared*/) {
 		init();
 	});
 });
@@ -33,14 +33,14 @@ function init() {
 			when: 1, //Start alarm right away
 			periodInMinutes: parseInt(options.interval) //every 30minutes
 		});
-		chrome.alarms.onAlarm.addListener(function (alarm) {
+		chrome.alarms.onAlarm.addListener(function (/*alarm*/) {
 			saveTabs();
 		});
 	});
 }
 
 function saveTabs() {
-	var tabObj = {};
+	let tabObj = {};
 	chrome.tabs.query({}, function(tabs) {
 		tabs.forEach(function(tab) {
 			tabObj[tab.windowId] = tabObj[tab.windowId] || {};
@@ -86,10 +86,10 @@ function saveTabs() {
 					xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args));
 				},
 				data: jsonData,
-				success: function( response ) {
+				success: function(/*response*/) {
 					console.log('Data saved to Dropbox!');
 				},
-				error: function(XMLHttpRequest, textStatus, errorThrown) {
+				error: function(XMLHttpRequest/*, textStatus, errorThrown*/) {
 					console.log(XMLHttpRequest.responseText);
 				}
 			});
@@ -98,14 +98,13 @@ function saveTabs() {
 }
 
 function getTimestamp(useTimestamp) {
-	if(useTimestamp) {
-		var timestamp = Date.now();
-	} else {
+	let timestamp = Date.now();
+	if(!useTimestamp) {
 		let now  = new Date(),
 		    YYYY = now.getFullYear(),
 		    DD   = now.getDate(),
 		    MM   = now.getMonth()+1, //January is 0!
-			hh   = now.getHours(),
+		    hh   = now.getHours(),
 		    mm   = now.getMinutes(),
 		    ss   = now.getSeconds();
 
@@ -115,7 +114,7 @@ function getTimestamp(useTimestamp) {
 		if(mm<10) mm = '0'+mm;
 		if(ss<10) ss = '0'+ss;
 
-		var timestamp = YYYY+'/'+MM+'/'+DD+'_'+hh+mm+ss;
+		timestamp = YYYY+'/'+MM+'/'+DD+'_'+hh+mm+ss;
 	}
 
 	return timestamp
