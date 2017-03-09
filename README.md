@@ -1,0 +1,1 @@
+A Google Chrome extension to automatically save your tabs to a JSON file on your Dropbox at a set interval.
