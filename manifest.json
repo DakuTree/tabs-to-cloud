@@ -1,0 +1,36 @@
+{
+	"manifest_version" : 2,
+
+	"name" : "Tabs to Dropbox",
+	"description" : "Saves chrome tabs in a JSON file on your Dropbox.\nFor times where chrome fucks up your session.",
+
+	"version" : "1.0",
+
+	"icons" : {
+		"128" : "icon_128.png"
+	},
+
+	"permissions" : [
+		"storage",
+		"alarms",
+		"tabs"
+	],
+
+	"options_ui" : {
+		"page" : "options.html",
+
+		"chrome_style" : true
+
+		// Unsupported in future versions of chrome.
+		// "open_in_tab" : true
+	},
+
+	"background" : {
+		"scripts" : [
+			"lib/jquery-3.1.1.min.js",
+			"background.js"
+		]
+	},
+
+	"minimum_chrome_version" : "42"
+}

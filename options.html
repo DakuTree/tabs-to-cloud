@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="generator"
+    content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+		<title>My Test Extension Options</title>
+		<style>
+			body: { padding: 10px; }
+		</style>
+	</head>
+	<body>
+		<div id="options">
+			<!-- <fieldset> -->
+				<!-- <label for="dropbox-token">Dropbox Status: </label> -->
+				<!-- <input type="text" id="dropbox-token" readonly /> -->
+			<!-- </fieldset> -->
+
+			<fieldset>
+				<label for="interval">Save Interval: </label>
+				<select id="interval">
+					<option value="30">30 Minutes</option>
+					<option value="60">1 Hour</option>
+					<option value="240">3 Hours</option>
+					<option value="480">6 Hours</option>
+					<option value="960">12 Hours</option>
+					<option value="1920">24 Hours</option>
+				</select>
+			</fieldset>
+
+			<fieldset>
+				<label>Encryption Level: </label>
+				<select id="encryption">
+					<option value="text">Plain Text</option>
+					<option value="obfuscate">Obfuscate (Base64)</option>
+					<option value="encrypt" disabled>Encrypt (???)</option>
+				</select>
+			</fieldset>
+
+			<fieldset>
+				<label for="human-timestamp">Use human-readable date (<abbr title="YYYY-MM-DD_HHMMSS" style="text-decoration: underline; cursor: pointer; color: blue">?</abbr>): </label>
+				<input type="checkbox" id="human-timestamp" />
+			</fieldset>
+
+			<fieldset>
+				<label>Encryption Level: </label>
+				<select id="encryption">
+					<option value="text">Plain Text</option>
+					<option value="obfuscate">Obfuscate (Base64)</option>
+					<option value="encrypt" disabled>Encrypt (???)</option>
+				</select>
+			</fieldset>
+		</div>
+
+		<br/>
+		<div id="status"></div>
+		<button id="save">Save</button>
+
+		<!-- SCRIPTS -->
+		<script src="lib/jquery-3.1.1.min.js"></script>
+		<script src="options.js"></script>
+	</body>
+</html>
