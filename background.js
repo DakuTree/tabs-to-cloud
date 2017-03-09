@@ -19,6 +19,11 @@ chrome.storage.onChanged.addListener(function(changes, areaName) {
 	});
 });
 
+chrome.browserAction.onClicked.addListener(function() {
+	saveTabs();
+	//TODO: Show txt format?
+});
+
 init();
 function init() {
 	chrome.storage.sync.get({
