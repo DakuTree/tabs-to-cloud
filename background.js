@@ -52,14 +52,14 @@ function saveTabs() {
 		chrome.storage.sync.get({
 			dropbox_token  : '',
 			encryption     : 'text',
-			unix_timestamp : false
+			use_unix_timestamp : false
 		}, function (options) {
 			if(options.dropbox_token === '') return; //Dropbox token hasn't been set yet so just return
 
 			let jsonData = JSON.stringify(tabObj, null, '\t'),
 			    args = {
 				//FIXME: This filename should be PC specific
-				'path': '/'+getTimestamp(options.unix_timestamp)+'.{ENCRYPTION}.json',
+				'path': '/'+getTimestamp(options.use_unix_timestamp)+'.{ENCRYPTION}.json',
 				'mode': 'overwrite',
 				'autorename': false,
 				'mute': true
