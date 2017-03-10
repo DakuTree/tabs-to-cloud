@@ -1,14 +1,14 @@
 "use strict";
 
 chrome.runtime.onInstalled.addListener(function(details){
-    if(details.reason === "install"){
-        console.log("This is a first install!");
+	if(details.reason === "install"){
+		console.log("This is a first install!");
 
 		chrome.runtime.openOptionsPage();
-    }else if(details.reason === "update"){
-        let thisVersion = chrome.runtime.getManifest().version;
-        console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
-    }
+	} else if(details.reason === "update") {
+		let thisVersion = chrome.runtime.getManifest().version;
+		console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
+	}
 });
 chrome.storage.onChanged.addListener(function(/*changes, areaName*/) {
 	console.log("Detected storage change, reloading extension");
