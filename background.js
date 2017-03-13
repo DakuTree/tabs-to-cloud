@@ -20,7 +20,13 @@ chrome.storage.onChanged.addListener(function(/*changes, areaName*/) {
 });
 
 chrome.browserAction.onClicked.addListener(function() {
-	saveTabs();
+	saveTabs(function() {
+		chrome.browserAction.setBadgeText({text: 'Saved!'});
+		setTimeout(function () {
+			chrome.browserAction.setBadgeText({text: ""});
+		}, 3000);
+	});
+
 	//TODO: Show txt format?
 });
 
@@ -39,7 +45,7 @@ function init() {
 	});
 }
 
-function saveTabs() {
+function saveTabs(successCallback) {
 	let tabObj = {};
 	chrome.tabs.query({}, function(tabs) {
 		tabs.forEach(function(tab) {
@@ -91,6 +97,7 @@ function saveTabs() {
 				data: jsonData,
 				success: function(/*response*/) {
 					console.log('Data saved to Dropbox!');
+					successCallback();
 				},
 				error: function(XMLHttpRequest/*, textStatus, errorThrown*/) {
 					console.log(XMLHttpRequest.responseText);
