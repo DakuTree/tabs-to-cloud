@@ -11,9 +11,10 @@
 	},
 
 	"permissions" : [
-		"storage",
-		"alarms",
-		"tabs"
+		"identity", //Used for oAuth
+		"storage",  //Used for options
+		"alarms",   //Used for refreshing on set interval
+		"tabs"      //Used for getting tab data
 	],
 
 	"browser_action": {},
@@ -23,10 +24,19 @@
 		"chrome_style" : true
 	},
 
+
+	"oauth2" : {
+		"client_id" : "429174875771-u16vg950aqrtostlg88v5nmnodndooju.apps.googleusercontent.com",
+		"scopes" : [
+			"https://www.googleapis.com/auth/drive"
+		]
+	},
+
 	"background" : {
 		"scripts" : [
 			"lib/jquery-3.1.1.min.js",
-			"background.js"
+			"js/cloudServices.js",
+			"js/background.js"
 		]
 	},
 

@@ -1,19 +1,36 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="generator"
-    content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
 		<title>My Test Extension Options</title>
 		<style>
 			body { padding: 10px; }
+			input[type="radio"] { vertical-align: sub; }
 		</style>
 	</head>
 	<body>
 		<div id="options">
-			 <fieldset>
-				 <label for="dropbox-token">Dropbox Token: </label>
-				 <input type="text" id="dropbox-token" />
-			 </fieldset>
+			<fieldset aria-required="true">
+				<legend>Cloud Service</legend>
+
+				<label for="cloud-dropbox">
+					<input type="radio" name="cloud-service" id="cloud-dropbox" value="DropBox" />
+					Dropbox
+				</label>
+
+				<label for="cloud-googledrive">
+					<input type="radio" name="cloud-service" id="cloud-googledrive" value="GoogleDrive" />
+					Google Drive
+				</label>
+
+				<label for="cloud-onedrive">
+					<input type="radio" name="cloud-service" id="cloud-onedrive" value="OneDrive" />
+					OneDrive
+				</label>
+
+				<!-- PLACEHOLDER-->
+				<br />
+				<span id="authorize-container"><a href="#" id="authorize">Authorize</a></span>
+			</fieldset>
 
 			<fieldset>
 				<label for="interval">Save Interval: </label>
@@ -48,6 +65,7 @@
 
 		<!-- SCRIPTS -->
 		<script src="lib/jquery-3.1.1.min.js"></script>
-		<script src="options.js"></script>
+		<script src="js/cloudServices.js"></script>
+		<script src="js/options.js"></script>
 	</body>
 </html>

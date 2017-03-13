@@ -7,6 +7,8 @@ chrome.runtime.onInstalled.addListener(function(details){
 		chrome.runtime.openOptionsPage();
 	} else if(details.reason === "update") {
 		let thisVersion = chrome.runtime.getManifest().version;
+
+		//TODO: Handle version upgrades
 		console.log("Updated from " + details.previousVersion + " to " + thisVersion + "!");
 	}
 });
@@ -46,6 +48,10 @@ function init() {
 }
 
 function saveTabs(successCallback) {
+	successCallback = successCallback || function(){};
+
+	return;
+
 	let tabObj = {};
 	chrome.tabs.query({}, function(tabs) {
 		tabs.forEach(function(tab) {
@@ -56,53 +62,32 @@ function saveTabs(successCallback) {
 
 
 		chrome.storage.sync.get({
-			dropbox_token  : '',
-			encryption     : 'text',
+			cloud_service      : '',
+			encryption         : 'text',
 			use_unix_timestamp : false
 		}, function (options) {
-			if(options.dropbox_token === '') return; //Dropbox token hasn't been set yet so just return
+			if(options['cloud_service'] === '') return; //Cloud service hasn't been set yet so just return
+			let cloud_service = options['cloud_service'];
 
-			let jsonData = JSON.stringify(tabObj, null, '\t'),
-			    args = {
-				//FIXME: This filename should be PC specific
-				'path': '/'+getTimestamp(options.use_unix_timestamp)+'.{ENCRYPTION}.json',
-				'mode': 'overwrite',
-				'autorename': false,
-				'mute': true
-			};
-
-			switch(options.encryption) {
+			let filename = getTimestamp(options['use_unix_timestamp'])+'.{ENCRYPTION}.json',
+			    jsonData = JSON.stringify(tabObj, null, '\t');
+			switch(options['encryption']) {
 				case 'text':
-					args.path = args.path.replace('{ENCRYPTION}', 'text');
+					filename = filename.replace('{ENCRYPTION}', 'text');
 					break;
 
 				case 'obfuscate':
+					filename = filename.replace('{ENCRYPTION}', 'base64');
+					//FIXME: unescape is apparently deprecated but the alternative doesn't work the same?
 					jsonData  = btoa(unescape(encodeURIComponent(jsonData)));
-					args.path = args.path.replace('{ENCRYPTION}', 'base64');
 					break;
 
 				case 'encrypt':
-					args.path = args.path.replace('{ENCRYPTION}', 'encrypt');
+					filename = filename.replace('{ENCRYPTION}', 'encrypt');
 					break;
 			}
 
-			$.ajax({
-				url: 'https://content.dropboxapi.com/2/files/upload',
-				type: 'POST',
-				beforeSend: function (xhr) {
-					xhr.setRequestHeader('Authorization', 'Bearer ' + options.dropbox_token);
-					xhr.setRequestHeader('Content-Type', 'application/octet-stream');
-					xhr.setRequestHeader('Dropbox-API-Arg', JSON.stringify(args));
-				},
-				data: jsonData,
-				success: function(/*response*/) {
-					console.log('Data saved to Dropbox!');
-					successCallback();
-				},
-				error: function(XMLHttpRequest/*, textStatus, errorThrown*/) {
-					console.log(XMLHttpRequest.responseText);
-				}
-			});
+			cloudServices[cloud_service].upload(filename, jsonData, successCallback);
 		});
 	});
 }
