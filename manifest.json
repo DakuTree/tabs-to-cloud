@@ -2,7 +2,7 @@
 	"manifest_version" : 2,
 
 	"name" : "Tabs to Cloud",
-	"description" : "Saves chrome tabs in a JSON file on your cloud storage.\nFor times where chrome fucks up your session.",
+	"description" : "Saves chrome tabs in a JSON file on your cloud storage.\nFor times where chrome screws up your session.",
 
 	"version" : "1.0",
 
