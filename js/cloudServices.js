@@ -14,11 +14,15 @@ cloudServices['DropBox'] = {
 			//URL returns oAuthProvider/#P&A&R&A&M&S
 			let params = getParams(redirect_url.substr(oAuthProvider.length + 2));
 
-			chrome.storage.sync.set({
-				dropbox_token : params['access_token']
-			}, function () {
-				successCallback();
-			});
+			if(params['access_token']) {
+				chrome.storage.sync.set({
+					dropbox_token : params['access_token']
+				}, function () {
+					successCallback();
+				});
+			} else {
+				//errorCallback();
+			}
 		});
 	},
 
@@ -76,11 +80,15 @@ cloudServices['OneDrive'] = {
 			//URL returns oAuthProvider/#P&A&R&A&M&S
 			let params = getParams(redirect_url.substr(oAuthProvider.length + 2));
 
-			chrome.storage.sync.set({
-				onedrive_token : params['access_token']
-			}, function () {
-				successCallback();
-			});
+			if(params['access_token']) {
+				chrome.storage.sync.set({
+					onedrive_token : params['access_token']
+				}, function () {
+					successCallback();
+				});
+			} else {
+				//errorCallback();
+			}
 		});
 	},
 	upload : function(filename, jsonData, successCallback) {
