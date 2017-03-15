@@ -35,8 +35,11 @@ chrome.browserAction.onClicked.addListener(function() {
 init();
 function init() {
 	chrome.storage.sync.get({
-		interval: 60
+		interval      : 60,
+		cloud_service : ''
 	}, function (options) {
+		if(options['cloud_service'] !== 'DropBox') return; //Only DropBox can automatically update.
+
 		chrome.alarms.create('mainAlarm', {
 			when: 1, //Start alarm right away
 			periodInMinutes: parseInt(options.interval) //every 30minutes
