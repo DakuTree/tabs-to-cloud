@@ -49,9 +49,6 @@ function save_options() {
 function restore_options() {
 	chrome.storage.sync.get({
 		cloud_service       : '',
-		dropbox_token       : '',
-		googledrive_token   : '',
-		onedrive_token      : '',
 
 		interval            : 60,
 		encryption          : 'text',
