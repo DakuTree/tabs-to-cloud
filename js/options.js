@@ -3,7 +3,7 @@
 $(document).on('DOMContentLoaded', restore_options);
 $('#save').click(save_options);
 
-$('#authorize').click(function(e) {
+$(document).on("click", '#authorize', function(e) {
 	e.preventDefault();
 
 	chrome.storage.sync.get({
