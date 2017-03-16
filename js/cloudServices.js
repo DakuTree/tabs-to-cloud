@@ -26,7 +26,9 @@ cloudServices['DropBox'] = {
 		});
 	},
 
-	upload : function(filename, jsonData, successCallback) {
+	upload : function(filename, jsonData, successCallback, saveAttempted) {
+		saveAttempted = saveAttempted || false;
+
 		chrome.storage.sync.get({
 			dropbox_token: ''
 		}, function (options) {
@@ -63,7 +65,9 @@ cloudServices['DropBox'] = {
 
 cloudServices['GoogleDrive'] = {
 	authorize : function(successCallback) {},
-	upload : function(filename, jsonData, successCallback) {}
+	upload : function(filename, jsonData, successCallback, saveAttempted) {
+		saveAttempted = saveAttempted || false;
+	}
 };
 
 const authOneDrive = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=626a1669-c13f-4558-8603-88b49c383147&scope=files.readwrite.appfolder offline_access&response_type=token&redirect_uri="+oAuthProvider+"";
@@ -91,7 +95,11 @@ cloudServices['OneDrive'] = {
 			}
 		});
 	},
-	upload : function(filename, jsonData, successCallback) {
+	upload : function(filename, jsonData, successCallback, saveAttempted) {
+		saveAttempted = saveAttempted || false;
+
+		let _this = this;
+
 		chrome.storage.sync.get({
 			onedrive_token: ''
 		}, function (options) {
@@ -110,9 +118,19 @@ cloudServices['OneDrive'] = {
 					successCallback();
 				},
 				error: function(XMLHttpRequest/*, textStatus, errorThrown*/) {
-					//TODO: Something went wrong! Maybe auth has expired, check again?
-					/** @namespace XMLHttpRequest.responseText */
-					console.log(XMLHttpRequest.responseText);
+					let response = XMLHttpRequest['responseText'];
+
+					try {
+						let jsonResponse = JSON.parse(response),
+						    errorCode    = jsonResponse.error.code;
+
+						if(errorCode === 'InvalidAuthenticationToken' && saveAttempted === false) {
+							_this.authorize(_this.upload(filename, jsonData, successCallback, true));
+						}
+					} catch(e) {
+						console.error('Not JSON?');
+						console.error(response);
+					}
 				}
 			});
 		});
