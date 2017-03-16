@@ -13,10 +13,10 @@
 	},
 
 	"permissions" : [
-		"identity", //Used for oAuth
-		"storage",  //Used for options
-		"alarms",   //Used for refreshing on set interval
-		"tabs"      //Used for getting tab data
+		"identity",
+		"storage",
+		"alarms",
+		"tabs"
 	],
 
 	"browser_action": {},
