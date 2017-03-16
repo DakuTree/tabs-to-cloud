@@ -6,15 +6,11 @@ $('#save').click(save_options);
 $(document).on("click", '#authorize', function(e) {
 	e.preventDefault();
 
-	chrome.storage.sync.get({
-		cloud_service       : ''
-	}, function (options) {
-		if(options['cloud_service'] === '') { alert('Please select a Cloud Service first'); return;}
-		let cloud_service = options['cloud_service'];
+	let cloud_service = $('input[name=cloud-service]:checked').val();
 
-		cloudServices[cloud_service].authorize(function() {
-			$('#authorize-container').text('Authorized');
-		});
+	if(cloud_service === '') { alert('Please select a Cloud Service first'); return;}
+	cloudServices[cloud_service].authorize(function() {
+		$('#authorize-container').text('Authorized');
 	});
 });
 
