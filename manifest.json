@@ -4,7 +4,7 @@
 	"name" : "Tabs to Cloud",
 	"description" : "Saves chrome tabs in a JSON file on your cloud storage.\nFor times where chrome screws up your session.",
 
-	"version" : "1.0",
+	"version" : "1.0.0",
 
 	"icons" : {
 		"16"  : "icon_16.png",
