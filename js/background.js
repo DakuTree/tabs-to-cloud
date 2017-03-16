@@ -53,8 +53,6 @@ function init() {
 function saveTabs(successCallback) {
 	successCallback = successCallback || function(){};
 
-	return;
-
 	let tabObj = {};
 	chrome.tabs.query({}, function(tabs) {
 		tabs.forEach(function(tab) {
