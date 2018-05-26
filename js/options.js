@@ -53,7 +53,7 @@ function restore_options() {
 		encryption          : 'text',
 		use_unix_timestamp  : false
 	}, function (options) {
-		$('#device').val(device_label);
+		$('#device').val(options['device_label']);
 
 		$('input[name=cloud-service][value='+options['cloud_service']+']').prop('checked', true);
 		check_authorization(options['cloud_service']);
