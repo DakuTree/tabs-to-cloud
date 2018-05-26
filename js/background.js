@@ -110,7 +110,7 @@ function getTimestamp(useTimestamp) {
 		if(mm<10) mm = '0'+mm;
 		if(ss<10) ss = '0'+ss;
 
-		timestamp = YYYY+'/'+MM+'/'+DD+'_'+hh+mm+ss;
+		timestamp = YYYY+'/'+MM+'/'+DD+'/'+hh+mm+ss;
 	}
 
 	return timestamp
