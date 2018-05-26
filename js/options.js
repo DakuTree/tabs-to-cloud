@@ -55,8 +55,10 @@ function restore_options() {
 	}, function (options) {
 		$('#device').val(options['device_label']);
 
-		$('input[name=cloud-service][value='+options['cloud_service']+']').prop('checked', true);
-		check_authorization(options['cloud_service']);
+		if(options['cloud_service'] !== '') {
+			$('input[name=cloud-service][value='+options['cloud_service']+']').prop('checked', true);
+			check_authorization(options['cloud_service']);
+		}
 
 		$('#interval').val(options['interval']);
 		$('#encryption').val(options['encryption']);
