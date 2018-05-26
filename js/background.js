@@ -34,7 +34,7 @@ chrome.browserAction.onClicked.addListener(function() {
 
 init();
 function init() {
-	chrome.storage.sync.get({
+	chrome.storage.local.get({
 		interval      : 60,
 		cloud_service : ''
 	}, function (options) {
@@ -62,7 +62,8 @@ function saveTabs(successCallback) {
 		});
 
 
-		chrome.storage.sync.get({
+		chrome.storage.local.get({
+			device_label       : 'default',
 			cloud_service      : '',
 			encryption         : 'text',
 			use_unix_timestamp : false
@@ -70,7 +71,7 @@ function saveTabs(successCallback) {
 			if(options['cloud_service'] === '') return; //Cloud service hasn't been set yet so just return
 			let cloud_service = options['cloud_service'];
 
-			let filename = getTimestamp(options['use_unix_timestamp'])+'.{ENCRYPTION}.json',
+			let filename = options['device_label'] + '/' + getTimestamp(options['use_unix_timestamp'])+'.{ENCRYPTION}.json',
 			    jsonData = JSON.stringify(tabObj, null, '\t');
 			switch(options['encryption']) {
 				case 'text':

@@ -19,7 +19,8 @@ $('input[name=cloud-service]:radio').change(function(){
 });
 
 function save_options() {
-	let cloud_service      = $('input[name=cloud-service]:checked').val(),
+	let device_label       = $('#device').trim(),
+	    cloud_service      = $('input[name=cloud-service]:checked').val(),
 	    interval           = parseInt($('#interval').val()),
 	    encryption         = $('#encryption').val(),
 	    use_unix_timestamp = $("#use-unix-timestamp").is(':checked');
@@ -27,7 +28,8 @@ function save_options() {
 	//Just incase something goes horribly wrong, let's not break the users browser with infinite requests..
 	if(interval < 30) interval = 60;
 
-	chrome.storage.sync.set({
+	chrome.storage.local.set({
+		device_label       : device_label,
 		cloud_service      : cloud_service,
 		interval           : interval,
 		encryption         : encryption,
@@ -43,13 +45,16 @@ function save_options() {
 }
 
 function restore_options() {
-	chrome.storage.sync.get({
+	chrome.storage.local.get({
+		device_label        : 'default',
 		cloud_service       : '',
 
 		interval            : 60,
 		encryption          : 'text',
 		use_unix_timestamp  : false
 	}, function (options) {
+		$('#device').val(device_label);
+
 		$('input[name=cloud-service][value='+options['cloud_service']+']').prop('checked', true);
 		check_authorization(options['cloud_service']);
 
@@ -64,7 +69,7 @@ function check_authorization(cloud_service) {
 
 	let getOptions = {};
 	getOptions[token_name] = '';
-	chrome.storage.sync.get(getOptions, function (options) {
+	chrome.storage.local.get(getOptions, function (options) {
 		let current_token = options[token_name];
 		if(current_token !== '') {
 			$('#authorize-container').html('').append('Authorized | ').append(

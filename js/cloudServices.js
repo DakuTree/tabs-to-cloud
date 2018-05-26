@@ -15,7 +15,7 @@ cloudServices['DropBox'] = {
 			let params = getParams(redirect_url.substr(oAuthProvider.length + 2));
 
 			if(params['access_token']) {
-				chrome.storage.sync.set({
+				chrome.storage.local.set({
 					dropbox_token : params['access_token']
 				}, function () {
 					successCallback();
@@ -29,7 +29,7 @@ cloudServices['DropBox'] = {
 	upload : function(filename, jsonData, successCallback, saveAttempted) {
 		saveAttempted = saveAttempted || false;
 
-		chrome.storage.sync.get({
+		chrome.storage.local.get({
 			dropbox_token: ''
 		}, function (options) {
 			if(options['dropbox_token'] === '') return; //Dropbox token hasn't been set yet so just return
@@ -85,7 +85,7 @@ cloudServices['OneDrive'] = {
 			let params = getParams(redirect_url.substr(oAuthProvider.length + 2));
 
 			if(params['access_token']) {
-				chrome.storage.sync.set({
+				chrome.storage.local.set({
 					onedrive_token : params['access_token']
 				}, function () {
 					successCallback();
@@ -100,7 +100,7 @@ cloudServices['OneDrive'] = {
 
 		let _this = this;
 
-		chrome.storage.sync.get({
+		chrome.storage.local.get({
 			onedrive_token: ''
 		}, function (options) {
 			if(options['onedrive_token'] === '') return; //OneDrive token hasn't been set yet so just return
