@@ -19,7 +19,7 @@ $('input[name=cloud-service]:radio').change(function(){
 });
 
 function save_options() {
-	let device_label       = $('#device').trim(),
+	let device_label       = $('#device').val().trim(),
 	    cloud_service      = $('input[name=cloud-service]:checked').val(),
 	    interval           = parseInt($('#interval').val()),
 	    encryption         = $('#encryption').val(),
@@ -27,6 +27,7 @@ function save_options() {
 
 	//Just incase something goes horribly wrong, let's not break the users browser with infinite requests..
 	if(interval < 30) interval = 60;
+	if(! /^[a-zA-Z0-9]{1,12}$/.test(device_label)) device_label = 'Default';
 
 	chrome.storage.local.set({
 		device_label       : device_label,
@@ -46,7 +47,7 @@ function save_options() {
 
 function restore_options() {
 	chrome.storage.local.get({
-		device_label        : 'default',
+		device_label        : 'Default',
 		cloud_service       : '',
 
 		interval            : 60,

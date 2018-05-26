@@ -63,7 +63,7 @@ function saveTabs(successCallback) {
 
 
 		chrome.storage.local.get({
-			device_label       : 'default',
+			device_label       : 'Default',
 			cloud_service      : '',
 			encryption         : 'text',
 			use_unix_timestamp : false
