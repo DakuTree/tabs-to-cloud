@@ -1,87 +1,105 @@
 "use strict";
 
-$(document).on('DOMContentLoaded', restore_options);
-$('#save').click(save_options);
 
-$(document).on("click", '#authorize', function(e) {
-	e.preventDefault();
+document.addEventListener('DOMContentLoaded', restore_options);
 
-	let cloud_service = $('input[name=cloud-service]:checked').val();
+// Save button click
+document.getElementById('save').addEventListener('click', save_options);
 
-	if(cloud_service === '') { alert('Please select a Cloud Service first'); return;}
-	cloudServices[cloud_service].authorize(function() {
-		$('#authorize-container').text('Authorized');
+// Authorize button click (delegated, since it’s dynamically added)
+document.addEventListener('click', e => {
+	if (e.target && e.target.id === 'authorize') {
+		e.preventDefault();
+		const cloud_service = document.querySelector('input[name="cloud-service"]:checked')?.value;
+
+		if (!cloud_service) {
+			alert('Please select a Cloud Service first');
+			return;
+		}
+
+		cloudServices[cloud_service].authorize(() => {
+			document.getElementById('authorize-container').textContent = 'Authorized';
+		});
+	}
+});
+
+// Cloud service radio change
+document.querySelectorAll('input[name="cloud-service"]').forEach(radio => {
+	radio.addEventListener('change', e => {
+		check_authorization(e.target.value);
 	});
 });
 
-$('input[name=cloud-service]:radio').change(function(){
-	check_authorization($(this).val());
-});
-
 function save_options() {
-	let device_label       = $('#device').val().trim(),
-	    cloud_service      = $('input[name=cloud-service]:checked').val(),
-	    interval           = parseInt($('#interval').val()),
-	    encryption         = $('#encryption').val(),
-	    use_unix_timestamp = $("#use-unix-timestamp").is(':checked');
+	let device_label = document.getElementById('device').value.trim();
+	let cloud_service = document.querySelector('input[name="cloud-service"]:checked')?.value || '';
+	let interval = parseInt(document.getElementById('interval').value, 10);
+	let encryption = document.getElementById('encryption').value;
+	let use_unix_timestamp = document.getElementById('use-unix-timestamp').checked;
 
-	//Just incase something goes horribly wrong, let's not break the users browser with infinite requests..
-	if(interval < 30) interval = 60;
-	if(! /^[a-zA-Z0-9]{1,12}$/.test(device_label)) device_label = 'Default';
+	// Safety checks
+	if (interval < 30) interval = 60;
+	if (!/^[a-zA-Z0-9]{1,12}$/.test(device_label)) device_label = 'Default';
 
 	chrome.storage.local.set({
-		device_label       : device_label,
-		cloud_service      : cloud_service,
-		interval           : interval,
-		encryption         : encryption,
-		use_unix_timestamp : use_unix_timestamp
-	}, function () {
-		let status = $('#status');
-		status.text('Options saved.');
+		device_label,
+		cloud_service,
+		interval,
+		encryption,
+		use_unix_timestamp
+	}, () => {
+		const status = document.getElementById('status');
+		status.textContent = 'Options saved.';
 
-		setTimeout(function () {
-			status.text('');
+		// This is safe here (only an issue for service workers)
+		setTimeout(() => {
+			status.textContent = '';
 		}, 3000);
 	});
 }
 
 function restore_options() {
 	chrome.storage.local.get({
-		device_label        : 'Default',
-		cloud_service       : '',
+		device_label: 'Default',
+		cloud_service: '',
+		interval: 60,
+		encryption: 'text',
+		use_unix_timestamp: false
+	}, options => {
+		document.getElementById('device').value = options.device_label;
+		document.getElementById('interval').value = options.interval;
+		document.getElementById('encryption').value = options.encryption;
+		document.getElementById('use-unix-timestamp').checked = options.use_unix_timestamp;
 
-		interval            : 60,
-		encryption          : 'text',
-		use_unix_timestamp  : false
-	}, function (options) {
-		$('#device').val(options['device_label']);
-
-		if(options['cloud_service'] !== '') {
-			$('input[name=cloud-service][value='+options['cloud_service']+']').prop('checked', true);
-			check_authorization(options['cloud_service']);
+		if (options.cloud_service) {
+			const radio = document.querySelector(`input[name="cloud-service"][value="${options.cloud_service}"]`);
+			if (radio) radio.checked = true;
+			check_authorization(options.cloud_service);
 		}
-
-		$('#interval').val(options['interval']);
-		$('#encryption').val(options['encryption']);
-		$('#use-unix-timestamp').prop('checked', options['use_unix_timestamp']);
 	});
 }
 
 function check_authorization(cloud_service) {
-	let token_name = cloud_service.toLowerCase()+'_token';
+	const token_name = cloud_service.toLowerCase() + '_token';
+	chrome.storage.local.get({ [token_name]: '' }, options => {
+		const current_token = options[token_name];
+		const container = document.getElementById('authorize-container');
+		container.innerHTML = '';
 
-	let getOptions = {};
-	getOptions[token_name] = '';
-	chrome.storage.local.get(getOptions, function (options) {
-		let current_token = options[token_name];
-		if(current_token !== '') {
-			$('#authorize-container').html('').append('Authorized | ').append(
-				$('<a/>', {href: '#', id: 'authorize', text: 'Reauthorize?'})
-			);
+		if (current_token) {
+			container.appendChild(document.createTextNode('Authorized | '));
+
+			const link = document.createElement('a');
+			link.href = '#';
+			link.id = 'authorize';
+			link.textContent = 'Reauthorize?';
+			container.appendChild(link);
 		} else {
-			$('#authorize-container').html('').append(
-				$('<a/>', {href: '#', id: 'authorize', text: 'Authorize'})
-			)
+			const link = document.createElement('a');
+			link.href = '#';
+			link.id = 'authorize';
+			link.textContent = 'Authorize';
+			container.appendChild(link);
 		}
 	});
 }
